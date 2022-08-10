@@ -17,5 +17,11 @@ namespace GameBoard
         }
 
         //methods
+
+        public Peca PecaMth(int linha, int coluna) { 
+            
+            return Pecas[linha,coluna];
+
+        }
     }
 }

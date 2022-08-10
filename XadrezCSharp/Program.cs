@@ -7,8 +7,12 @@ namespace XadrezCSharp
     {
         static void Main(string[] args)
         {
-            //instanciando objeto
-            Tabuleiro tap = new Tabuleiro(8,8);
+            //instanciando objeto Tabuleiro
+            Tabuleiro tab = new Tabuleiro(8,8);
+
+
+            //usando o method static Do objeto Tela
+            Tela.ImprimirTabuleiro(tab);
 
             Console.ReadLine();
         }
