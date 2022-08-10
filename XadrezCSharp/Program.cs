@@ -8,18 +8,34 @@ namespace XadrezCSharp
     {
         static void Main(string[] args)
         {
-            //instanciando objeto Tabuleiro
-            Tabuleiro tab = new Tabuleiro(8,8);
+            /**
+             * 
+             * Usando o try catch para exibir a message na 
+             * exeção criada
+             * 
+             **/
+            try
+            {
+                //instanciando objeto Tabuleiro
+                Tabuleiro tab = new Tabuleiro(8, 8);
 
-            /*Colocando peca*/
-            tab.ColocarPeca(new Torre(tab, Cor.Preta), new Posicao(0,0));
-            tab.ColocarPeca(new Torre(tab, Cor.Preta), new Posicao(1,3));
-            tab.ColocarPeca(new Rei(tab, Cor.Preta), new Posicao(2,4));
+                /*Colocando peca*/
+                tab.ColocarPeca(new Torre(tab, Cor.Preta), new Posicao(0, 0));
+                tab.ColocarPeca(new Torre(tab, Cor.Preta), new Posicao(1, 3));
+                tab.ColocarPeca(new Rei(tab, Cor.Preta), new Posicao(0, 9));
 
-            //usando o method static Do objeto Tela
-            Tela.ImprimirTabuleiro(tab);
+                //usando o method static Do objeto Tela
+                Tela.ImprimirTabuleiro(tab);
+
+
+            }
+            catch (TabuleiroException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             Console.ReadLine();
+
         }
     }
 }
