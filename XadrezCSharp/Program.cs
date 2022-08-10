@@ -1,5 +1,5 @@
 ﻿using System;
-using Tabuleiro;
+using GameBoard;
 
 namespace XadrezCSharp
 {
@@ -8,11 +8,7 @@ namespace XadrezCSharp
         static void Main(string[] args)
         {
             //instanciando objeto
-            Posicao P;
-
-            P = new Posicao(3,4);
-
-            Console.WriteLine("Posição: " + P);
+            Tabuleiro tap = new Tabuleiro(8,8);
 
             Console.ReadLine();
         }

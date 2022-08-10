@@ -4,7 +4,7 @@
  * Mudando o namespace 
  * 
  **/
-namespace Tabuleiro
+namespace GameBoard
 {
     internal class Posicao
     {
