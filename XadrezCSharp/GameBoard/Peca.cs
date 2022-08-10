@@ -25,5 +25,11 @@ namespace GameBoard
             Cor = cor;
             QtdMoviment = 0;    //não fez nenhum movimento
         }
+
+        //Method
+        public void IncrementarQtdMovimentos() 
+        {
+            QtdMoviment++;
+        }
     }
 }

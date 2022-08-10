@@ -62,6 +62,23 @@ namespace GameBoard
 
         }
 
+        //retirar pecas
+        public Peca RetirarPeca(Posicao position) 
+        {
+            //verificando o local da peca
+            if (PecaMth(position) == null) 
+            {
+                return null;
+            }
+
+            //passou significa tem peca
+            Peca aux = PecaMth(position);
+            aux.Posicao = null; //estou removendo ela no tabuleiro
+            Pecas[position.Linha, position.Coluna] = null;
+
+            return aux;
+        }
+
         //testando posicao
         public bool PosicaoValida(Posicao position)
         {
