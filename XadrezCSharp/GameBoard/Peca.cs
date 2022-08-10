@@ -18,12 +18,12 @@ namespace GameBoard
         public Tabuleiro Tabuleiro { get; protected set; }
 
         //Construtor
-        public Peca(Posicao posicao, Tabuleiro tabuleiro, Cor cor) 
+        public Peca(Tabuleiro tabuleiro, Cor cor) 
         {
-            Posicao = posicao;
+            Posicao = null; //Quando começa um jogo a peça tem uma posicao null
             Tabuleiro = tabuleiro;
             Cor = cor;
-            QtdMoviment = 0;
+            QtdMoviment = 0;    //não fez nenhum movimento
         }
     }
 }

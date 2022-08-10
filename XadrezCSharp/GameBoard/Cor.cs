@@ -5,7 +5,7 @@ using System.Text;
 namespace GameBoard
 {
     /*uma Class enumerada*/
-    enum Cor : int
+    enum Cor
     {
         Branca,
         Preta,

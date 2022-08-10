@@ -23,5 +23,15 @@ namespace GameBoard
             return Pecas[linha,coluna];
 
         }
+
+        public void ColocarPeca(Peca p, Posicao position) 
+        {
+            //falando que eu quero a pecas que esta na posicao linha E coluna
+            Pecas[position.Linha, position.Coluna] = p;
+
+            //aqui estou dizendo agora a posicao dessa peça é posistion
+            p.Posicao = position;
+
+        }
     }
 }
