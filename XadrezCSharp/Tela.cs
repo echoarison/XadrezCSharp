@@ -1,5 +1,6 @@
 ﻿using System;
 using GameBoard;
+using Chess;
 
 namespace XadrezCSharp
 {
@@ -38,7 +39,15 @@ namespace XadrezCSharp
 
         }
 
-        //method static
+        public static PosicaoXadrez LerPosicaoXadrez() 
+        {
+            string s = Console.ReadLine();    //vai pegar a posicao do GameBoardChess
+            char coluna = s[0];
+            int linha = int.Parse(s[1] + "");
+
+            return new PosicaoXadrez(coluna,linha); 
+        }
+
         public static void ImprimirPecas(Peca peca)
         {
 

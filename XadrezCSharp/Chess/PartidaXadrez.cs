@@ -9,6 +9,7 @@ namespace Chess
         public Tabuleiro _tabuleiro { get; private set; }
         private int _turno;
         private Cor _jogadorAtual;
+        public bool _terminada { get; private set; }
 
         //construtor
         public PartidaXadrez() 
@@ -16,6 +17,7 @@ namespace Chess
             _tabuleiro = new Tabuleiro(8,8);
             _turno = 1;
             _jogadorAtual = Cor.Branca;
+            _terminada = false;
             ColocarPecas();
         }
 

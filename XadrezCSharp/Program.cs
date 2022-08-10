@@ -20,8 +20,31 @@ namespace XadrezCSharp
                 //instanciando a partida de xadrez
                 PartidaXadrez partida = new PartidaXadrez();
 
-                //usando o method static Do objeto Tela
-                Tela.ImprimirTabuleiro(partida._tabuleiro);
+                //criando um laço ate a partida terminar
+                while (!partida._terminada)
+                {
+                    //limpando a tela
+                    Console.Clear();
+
+                    //usando o method static Do objeto Tela
+                    Tela.ImprimirTabuleiro(partida._tabuleiro);
+
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    //posicao de origem
+                    Console.Write("Digite a posicao de origem: ");
+
+                    Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
+
+                    //posicao de destino
+                    Console.Write("Digite a posicao de destino: ");
+                    Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
+
+                    //executar o movimento
+                    partida.ExecutaMovimento(origem, destino);
+                }
+                
 
 
             }
