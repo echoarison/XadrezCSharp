@@ -2,7 +2,7 @@
 
 namespace GameBoard
 {
-    internal class Peca
+    abstract class Peca
     {
         /**
          * 
@@ -31,5 +31,8 @@ namespace GameBoard
         {
             QtdMoviment++;
         }
+
+        //Method abstract
+        public abstract bool[,] MovimentosPossiveis();
     }
 }
