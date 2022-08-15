@@ -1,5 +1,4 @@
-﻿using System;
-using GameBoard;
+﻿using GameBoard;
 
 namespace Chess
 {
@@ -7,14 +6,14 @@ namespace Chess
     {
         //atributo autoProp
         public Tabuleiro _tabuleiro { get; private set; }
-        private int _turno;
-        private Cor _jogadorAtual;
+        public int _turno { get; private set; }
+        public Cor _jogadorAtual { get; private set; }
         public bool _terminada { get; private set; }
 
         //construtor
-        public PartidaXadrez() 
+        public PartidaXadrez()
         {
-            _tabuleiro = new Tabuleiro(8,8);
+            _tabuleiro = new Tabuleiro(8, 8);
             _turno = 1;
             _jogadorAtual = Cor.Branca;
             _terminada = false;
@@ -22,14 +21,14 @@ namespace Chess
         }
 
         //method
-        public void ExecutaMovimento(Posicao origin, Posicao destino) 
+        public void ExecutaMovimento(Posicao origin, Posicao destino)
         {
             //fazendo o movimento como estivesse jogando
             Peca p = _tabuleiro.RetirarPeca(origin);
 
             //executando o movimento
             p.IncrementarQtdMovimentos();
-            
+
             //setiver peca na casa aonde foi jogado ela vai ser capturada
             Peca pecaCapturar = _tabuleiro.RetirarPeca(destino);
 
@@ -37,8 +36,35 @@ namespace Chess
             _tabuleiro.ColocarPeca(p, destino);
         }
 
+        public void RealizaJogada(Posicao origem, Posicao destino)
+        {
+            //fazendo o movimento
+            ExecutaMovimento(origem, destino);
+
+            //mudando o turno
+            _turno++;
+
+            //muda jogador
+            MudaJogador();
+        }
+
+        //method private
+        private void MudaJogador()
+        {
+            if (_jogadorAtual == Cor.Branca)
+            {
+                //mudando de cor
+                _jogadorAtual = Cor.Preta;
+            }
+            else 
+            {
+                _jogadorAtual = Cor.Branca;
+            }
+        }
+
         //method aux
-        private void ColocarPecas() {
+        private void ColocarPecas()
+        {
             //Usando a Class PosicaoXadrez() e o method ToPosicao
             _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('c', 1).ToPosicao());
             _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('c', 2).ToPosicao());

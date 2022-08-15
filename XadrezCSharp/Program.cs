@@ -28,8 +28,12 @@ namespace XadrezCSharp
 
                     //usando o method static Do objeto Tela
                     Tela.ImprimirTabuleiro(partida._tabuleiro);
-
                     Console.WriteLine();
+
+                    //escrevendo o turno
+                    Console.WriteLine("Turno: " + partida._turno);
+                    Console.WriteLine("Aguardando jogada do jogador: " + partida._jogadorAtual);
+
                     Console.WriteLine();
 
                     //posicao de origem
@@ -50,7 +54,7 @@ namespace XadrezCSharp
                     Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
 
                     //executar o movimento
-                    partida.ExecutaMovimento(origem, destino);
+                    partida.RealizaJogada(origem, destino);
                 }
 
 
