@@ -28,7 +28,7 @@ namespace Chess
             Peca p = _tabuleiro.RetirarPeca(origin);
 
             //executando o movimento
-            //p.IncrementarQtdMovimentos();
+            p.IncrementarQtdMovimentos();
             
             //setiver peca na casa aonde foi jogado ela vai ser capturada
             Peca pecaCapturar = _tabuleiro.RetirarPeca(destino);

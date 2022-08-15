@@ -37,6 +37,14 @@ namespace XadrezCSharp
 
                     Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
 
+                    //mostrando os movimentos possiveis
+                    bool[,] posicoesPossiveis = partida._tabuleiro.PecaMth(origem).MovimentosPossiveis();
+
+                    //limpando a tela
+                    Console.Clear();
+                    Tela.ImprimirTabuleiro(partida._tabuleiro, posicoesPossiveis);
+                    Console.WriteLine();
+
                     //posicao de destino
                     Console.Write("Digite a posicao de destino: ");
                     Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
@@ -44,13 +52,19 @@ namespace XadrezCSharp
                     //executar o movimento
                     partida.ExecutaMovimento(origem, destino);
                 }
-                
+
 
 
             }
             catch (TabuleiroException e)
             {
                 Console.WriteLine(e.Message);
+            }
+            catch (Exception e) 
+            {
+                Console.Clear();
+                Console.WriteLine("Erro não cartalogado: " + e.Message);
+
             }
 
             Console.ReadLine();

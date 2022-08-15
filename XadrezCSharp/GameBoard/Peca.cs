@@ -27,10 +27,10 @@ namespace GameBoard
         }
 
         //Method
-        /*public void IncrementarQtdMovimentos() 
+        public void IncrementarQtdMovimentos() 
         {
             QtdMoviment++;
-        }*/
+        }
 
         //Method abstract
         public abstract bool[,] MovimentosPossiveis();
