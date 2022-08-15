@@ -58,6 +58,14 @@ namespace GameBoard
 
         }
 
+        //method para ver se a peça pode mover certa direcao
+        public bool PodeMoverPeca(Posicao position) 
+        {
+
+            return MovimentosPossiveis()[position.Linha, position.Coluna];
+
+        }
+
         //Method abstract
         public abstract bool[,] MovimentosPossiveis();
     }

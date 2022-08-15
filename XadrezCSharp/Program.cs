@@ -54,6 +54,7 @@ namespace XadrezCSharp
                         //posicao de destino
                         Console.Write("Digite a posicao de destino: ");
                         Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
+                        partida.ValidarPosicaoDeDestino(origem, destino);
 
                         //executar o movimento
                         partida.RealizaJogada(origem, destino);

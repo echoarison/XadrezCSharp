@@ -69,6 +69,16 @@ namespace Chess
             }       
         }
 
+        //validando o destino
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino) 
+        {
+            //verificando se não pode mover
+            if (!_tabuleiro.PecaMth(origem).PodeMoverPeca(destino))
+            {
+                throw new TabuleiroException("Posicao de destino invalida!!!");
+            }
+        }
+
         //method private
         private void MudaJogador()
         {
