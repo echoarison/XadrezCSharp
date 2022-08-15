@@ -12,6 +12,7 @@ namespace Chess
         public bool _terminada { get; private set; }
         private HashSet<Peca> _pecas;   //conjunto é uma coleção de dados que obedece uma ordem
         private HashSet<Peca> _capturadas;  //conjunto é uma coleção de dados que obedece uma ordem
+        public bool _xeque { get; private set; }
 
         //construtor
         public PartidaXadrez()
@@ -20,6 +21,7 @@ namespace Chess
             _turno = 1;
             _jogadorAtual = Cor.Branca;
             _terminada = false;
+            _xeque = false;
             //tem que ser antes de colocar as pecas
             _pecas = new HashSet<Peca>();
             _capturadas = new HashSet<Peca>();
@@ -27,7 +29,7 @@ namespace Chess
         }
 
         //method
-        public void ExecutaMovimento(Posicao origin, Posicao destino)
+        public Peca ExecutaMovimento(Posicao origin, Posicao destino)
         {
             //fazendo o movimento como estivesse jogando
             Peca p = _tabuleiro.RetirarPeca(origin);
@@ -46,12 +48,58 @@ namespace Chess
             {
                 _capturadas.Add(pecaCapturar);
             }
+
+            return pecaCapturar;
+        }
+
+        public void DesfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) 
+        {
+            //instanciando peca
+            Peca p = _tabuleiro.RetirarPeca(destino);
+
+            //desfazendo o movimento
+            p.DescrementarQtdMovimentos();
+
+            //verificando se a peca é diferente de null
+            if (pecaCapturada != null) 
+            {
+                _tabuleiro.ColocarPeca(pecaCapturada, destino);
+                _capturadas.Remove(pecaCapturada);
+            }
+
+            _tabuleiro.ColocarPeca(p, origem);
+
         }
 
         public void RealizaJogada(Posicao origem, Posicao destino)
         {
             //fazendo o movimento
-            ExecutaMovimento(origem, destino);
+            Peca pecaCapturada = ExecutaMovimento(origem, destino);
+
+            //verifica se esse movimento estou em cheque
+            if (EstaEmXeque(_jogadorAtual)) 
+            {
+                //desfazer a jogada
+                DesfazMovimento(origem, destino, pecaCapturada);
+
+                //fazendo uma execeção
+                throw new TabuleiroException("Você não pode se colocar em xeque!!!");
+
+            }
+
+            //se deu xeque
+            if (EstaEmXeque(Adversaria(_jogadorAtual)))
+            {
+
+                _xeque = true;
+
+            }
+            else {
+
+                _xeque = false;
+
+            }
+
 
             //mudando o turno
             _turno++;
@@ -143,6 +191,73 @@ namespace Chess
 
             return aux;
 
+        }
+
+        private Cor Adversaria(Cor cor)
+        {
+
+            //verificando a cor adversaria
+            if (cor == Cor.Branca)
+            {
+
+                return Cor.Preta;
+
+            }
+            else
+            {
+
+                return Cor.Branca;
+
+            }
+
+        }
+
+        private Peca Rei(Cor cor)
+        {
+            //verificando a cor do Rei
+            foreach (Peca item in PecasEmJogo(cor))
+            {
+
+                //verificando se a varivel item é uma istancia de Rei
+                if (item is Rei)
+                {
+                    return item;
+                }
+
+            }
+
+            return null; //não tem Rei
+        }
+
+        public bool EstaEmXeque(Cor cor)
+        {
+            //variavel tmp
+            bool valueVerificado = false;
+
+            //instanciando uma peca
+            Peca R = Rei(cor);
+
+            //verificando se existe rei
+            if (R == null) {
+
+                throw new TabuleiroException("Não existe Rei da cor " + cor + "no tabuleiro!!");
+
+            }
+
+            //verificando cada peças adversaria que pode da xeque no rei
+            foreach (Peca item in PecasEmJogo(Adversaria(cor)))
+            {
+                //variavel temp
+                bool[,] matz = item.MovimentosPossiveis();
+
+                if (matz[R.Posicao.Linha, R.Posicao.Coluna])
+                {
+                    valueVerificado = true;
+                }
+
+            }
+
+            return valueVerificado;
         }
 
         //method aux

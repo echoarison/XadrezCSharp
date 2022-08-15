@@ -22,6 +22,14 @@ namespace XadrezCSharp
             //escrevendo o turno
             Console.WriteLine("Turno: " + partida._turno);
             Console.WriteLine("Aguardando jogada do jogador: " + partida._jogadorAtual);
+
+            //exibindo o xeque
+            if (partida._xeque) {
+
+                Console.WriteLine();
+                Console.WriteLine("Você esta em Xeque!!!");
+
+            }
         }
 
         public static void ImprimirPecasCapturadas(PartidaXadrez partida)

@@ -32,6 +32,11 @@ namespace GameBoard
             QtdMoviment++;
         }
 
+        public void DescrementarQtdMovimentos()
+        {
+            QtdMoviment--;
+        }
+
         //vendo se existe movimentos possiveis
         public bool ExisteMovimentoPossiveis() 
         {
