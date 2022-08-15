@@ -48,6 +48,27 @@ namespace Chess
             MudaJogador();
         }
 
+        public void ValidarPosicaoDeOrigem(Posicao position) 
+        {
+            //verificando se tem peca nessa posicao
+            if (_tabuleiro.PecaMth(position) == null) 
+            {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+
+            //verificando se jogador da partida atual e igual as peças que ele
+            if (_jogadorAtual != _tabuleiro.PecaMth(position).Cor) 
+            {
+                throw new TabuleiroException("A peça de origem escolhida não é sua!");
+            }
+
+            //verificando se não existe movimentos possiveis
+            if (!_tabuleiro.PecaMth(position).ExisteMovimentoPossiveis()) 
+            {
+                throw new TabuleiroException("Não há movimento possiveis para a peça de origem escolhida!");
+            }       
+        }
+
         //method private
         private void MudaJogador()
         {

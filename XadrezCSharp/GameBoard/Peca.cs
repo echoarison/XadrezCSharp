@@ -32,6 +32,32 @@ namespace GameBoard
             QtdMoviment++;
         }
 
+        //vendo se existe movimentos possiveis
+        public bool ExisteMovimentoPossiveis() 
+        {
+            //pegando o method abstract
+            bool[,] matz = MovimentosPossiveis();
+            bool velueVerificado = false;
+
+            //fazendo um for para verificar as linhas
+            for (int i = 0; i < Tabuleiro.Linhas; i++)
+            {
+                //agora as colunas
+                for (int j = 0; j < Tabuleiro.Colunas; j++)
+                {
+                    //verificando se existe movimento possivel para a peca
+                    if (matz[i, j] == true)
+                    {
+                        velueVerificado = true;
+                    }
+
+                }
+            }
+
+            return velueVerificado;
+
+        }
+
         //Method abstract
         public abstract bool[,] MovimentosPossiveis();
     }
