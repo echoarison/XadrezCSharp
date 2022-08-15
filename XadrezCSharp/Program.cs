@@ -67,6 +67,10 @@ namespace XadrezCSharp
                     }
                 }
 
+                //dizendo XequeMate
+                Console.Clear();
+                Tela.ImprimirPartida(partida);
+
             }
             catch (TabuleiroException e)
             {

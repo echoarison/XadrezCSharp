@@ -21,14 +21,25 @@ namespace XadrezCSharp
 
             //escrevendo o turno
             Console.WriteLine("Turno: " + partida._turno);
-            Console.WriteLine("Aguardando jogada do jogador: " + partida._jogadorAtual);
 
-            //exibindo o xeque
-            if (partida._xeque) {
+            //verificando se partida fpo terminada
+            if (!partida._terminada)
+            {
+                Console.WriteLine("Aguardando jogada do jogador: " + partida._jogadorAtual);
+                
+                //exibindo o xeque
+                if (partida._xeque)
+                {
 
-                Console.WriteLine();
-                Console.WriteLine("Você esta em Xeque!!!");
+                    Console.WriteLine();
+                    Console.WriteLine("Você esta em Xeque!!!");
 
+                }
+            }
+            else
+            {
+                Console.WriteLine("XequeMate!!");
+                Console.WriteLine("Vencedor: " + partida._jogadorAtual);
             }
         }
 
@@ -49,7 +60,7 @@ namespace XadrezCSharp
         public static void ImprimirConjunto(HashSet<Peca> conjunto)
         {
             Console.Write("[");
-            
+
             //fazendo um foreach para acessas os dados do conjunto
             foreach (Peca item in conjunto)
             {

@@ -52,7 +52,7 @@ namespace Chess
             return pecaCapturar;
         }
 
-        public void DesfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) 
+        public void DesfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada)
         {
             //instanciando peca
             Peca p = _tabuleiro.RetirarPeca(destino);
@@ -61,7 +61,7 @@ namespace Chess
             p.DescrementarQtdMovimentos();
 
             //verificando se a peca é diferente de null
-            if (pecaCapturada != null) 
+            if (pecaCapturada != null)
             {
                 _tabuleiro.ColocarPeca(pecaCapturada, destino);
                 _capturadas.Remove(pecaCapturada);
@@ -77,7 +77,7 @@ namespace Chess
             Peca pecaCapturada = ExecutaMovimento(origem, destino);
 
             //verifica se esse movimento estou em cheque
-            if (EstaEmXeque(_jogadorAtual)) 
+            if (EstaEmXeque(_jogadorAtual))
             {
                 //desfazer a jogada
                 DesfazMovimento(origem, destino, pecaCapturada);
@@ -94,18 +94,27 @@ namespace Chess
                 _xeque = true;
 
             }
-            else {
+            else
+            {
 
                 _xeque = false;
 
             }
 
+            //se ele ta em xequemate
+            if (TesteXequeMate(Adversaria(_jogadorAtual)))
+            {
+                _terminada = true;
+            }
+            else
+            {
+                //mudando o turno
+                _turno++;
 
-            //mudando o turno
-            _turno++;
+                //muda jogador
+                MudaJogador();
+            }
 
-            //muda jogador
-            MudaJogador();
         }
 
         public void ValidarPosicaoDeOrigem(Posicao position)
@@ -238,7 +247,8 @@ namespace Chess
             Peca R = Rei(cor);
 
             //verificando se existe rei
-            if (R == null) {
+            if (R == null)
+            {
 
                 throw new TabuleiroException("Não existe Rei da cor " + cor + "no tabuleiro!!");
 
@@ -260,6 +270,57 @@ namespace Chess
             return valueVerificado;
         }
 
+        public bool TesteXequeMate(Cor cor)
+        {
+            //variavel tmp
+            bool valueVerificado = true;
+
+            //verificando se ta em xeque
+            if (!EstaEmXeque(cor))
+            {
+                valueVerificado = false;
+            }
+
+
+            foreach (Peca item in PecasEmJogo(cor))
+            {
+                //vendo se tem todos os movimentos possiveis
+                bool[,] matz = item.MovimentosPossiveis();
+
+                //criando um for das linhas
+                for (int i = 0; i < _tabuleiro.Linhas; i++)
+                {
+                    //criando outro for para colunas
+                    for (int j = 0; j < _tabuleiro.Colunas; j++)
+                    {
+                        //vendo um movimento possivel de tirar o xeque
+                        if (matz[i, j])
+                        {
+                            //instanciando o novo destino
+                            Posicao origem = item.Posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca pecaCapturada = ExecutaMovimento(origem, destino);
+
+                            //vendo se ainda esta em xeque
+                            bool testeXeque = EstaEmXeque(cor);
+
+                            //desfazendo o movimento
+                            DesfazMovimento(origem, destino, pecaCapturada);
+
+                            //verificando se deixou de estar em xeque
+                            if (!testeXeque)
+                            {
+                                valueVerificado = false;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return valueVerificado;
+        }
+
         //method aux
 
         public void ColocarNovaPeca(char coluna, int linha, Peca peca)
@@ -276,18 +337,18 @@ namespace Chess
             //Usando a Class PosicaoXadrez() e o method ToPosicao
 
             ColocarNovaPeca('c', 1, new Torre(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('c', 2, new Torre(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('d', 2, new Torre(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('e', 2, new Torre(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('e', 1, new Torre(_tabuleiro, Cor.Branca));
             ColocarNovaPeca('d', 1, new Rei(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('h', 7, new Torre(_tabuleiro, Cor.Branca));
+            /*ColocarNovaPeca('e', 2, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('e', 1, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Rei(_tabuleiro, Cor.Branca));*/
 
-            ColocarNovaPeca('c', 7, new Torre(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('c', 8, new Torre(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('d', 7, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('a', 8, new Rei(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('b', 8, new Torre(_tabuleiro, Cor.Preta));
+            /*ColocarNovaPeca('d', 7, new Torre(_tabuleiro, Cor.Preta));
             ColocarNovaPeca('e', 7, new Torre(_tabuleiro, Cor.Preta));
             ColocarNovaPeca('e', 8, new Torre(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('d', 8, new Rei(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('d', 8, new Rei(_tabuleiro, Cor.Preta));*/
 
         }
     }
