@@ -26,6 +26,13 @@ namespace GameBoard
 
         //methods
 
+        //Esse method serve para definir os valores da posicao
+        public void DefinirValor(int linha, int coluna) 
+        {
+            this.Linha = linha;
+            this.Coluna = coluna;
+        }
+
         //override
         public override string ToString()
         {
