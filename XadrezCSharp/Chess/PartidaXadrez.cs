@@ -1,4 +1,5 @@
 ﻿using GameBoard;
+using System.Collections.Generic;   //vamos usar um HashSet
 
 namespace Chess
 {
@@ -9,6 +10,8 @@ namespace Chess
         public int _turno { get; private set; }
         public Cor _jogadorAtual { get; private set; }
         public bool _terminada { get; private set; }
+        private HashSet<Peca> _pecas;   //conjunto é uma coleção de dados que obedece uma ordem
+        private HashSet<Peca> _capturadas;  //conjunto é uma coleção de dados que obedece uma ordem
 
         //construtor
         public PartidaXadrez()
@@ -17,6 +20,9 @@ namespace Chess
             _turno = 1;
             _jogadorAtual = Cor.Branca;
             _terminada = false;
+            //tem que ser antes de colocar as pecas
+            _pecas = new HashSet<Peca>();
+            _capturadas = new HashSet<Peca>();
             ColocarPecas();
         }
 
@@ -34,6 +40,12 @@ namespace Chess
 
             //colocando a peca no local
             _tabuleiro.ColocarPeca(p, destino);
+
+            //add uma codição para pecaCapturadas
+            if (pecaCapturar != null)
+            {
+                _capturadas.Add(pecaCapturar);
+            }
         }
 
         public void RealizaJogada(Posicao origem, Posicao destino)
@@ -48,29 +60,29 @@ namespace Chess
             MudaJogador();
         }
 
-        public void ValidarPosicaoDeOrigem(Posicao position) 
+        public void ValidarPosicaoDeOrigem(Posicao position)
         {
             //verificando se tem peca nessa posicao
-            if (_tabuleiro.PecaMth(position) == null) 
+            if (_tabuleiro.PecaMth(position) == null)
             {
                 throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
             }
 
             //verificando se jogador da partida atual e igual as peças que ele
-            if (_jogadorAtual != _tabuleiro.PecaMth(position).Cor) 
+            if (_jogadorAtual != _tabuleiro.PecaMth(position).Cor)
             {
                 throw new TabuleiroException("A peça de origem escolhida não é sua!");
             }
 
             //verificando se não existe movimentos possiveis
-            if (!_tabuleiro.PecaMth(position).ExisteMovimentoPossiveis()) 
+            if (!_tabuleiro.PecaMth(position).ExisteMovimentoPossiveis())
             {
                 throw new TabuleiroException("Não há movimento possiveis para a peça de origem escolhida!");
-            }       
+            }
         }
 
         //validando o destino
-        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino) 
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino)
         {
             //verificando se não pode mover
             if (!_tabuleiro.PecaMth(origem).PodeMoverPeca(destino))
@@ -87,29 +99,81 @@ namespace Chess
                 //mudando de cor
                 _jogadorAtual = Cor.Preta;
             }
-            else 
+            else
             {
                 _jogadorAtual = Cor.Branca;
             }
         }
 
+        //vai retornar um conjunto de pecas capturadas da cor especifica
+        public HashSet<Peca> PecasCapturadas(Cor cor)
+        {
+            //criando um variavel temp
+            HashSet<Peca> aux = new HashSet<Peca>();
+
+            //fazendo um foreach para verificar o conjunto
+            foreach (Peca item in _capturadas)
+            {
+                if (item.Cor == cor)
+                {
+                    aux.Add(item);
+                }
+            }
+
+            return aux;
+
+        }
+
+        //vai retornar as peças que estão em jogo ainda
+        public HashSet<Peca> PecasEmJogo(Cor cor)
+        {
+            //criando um variavel temp
+            HashSet<Peca> aux = new HashSet<Peca>();
+
+            //fazendo um foreach para verificar o conjunto
+            foreach (Peca item in _pecas)
+            {
+                if (item.Cor == cor)
+                {
+                    aux.Add(item);
+                }
+            }
+
+            aux.ExceptWith(PecasCapturadas(cor)); //vou tirar todas as pecas da cor Execeto as que foram capturadas
+
+            return aux;
+
+        }
+
         //method aux
+
+        public void ColocarNovaPeca(char coluna, int linha, Peca peca)
+        {
+            //vai colocar pecas no tabuleiro
+            _tabuleiro.ColocarPeca(peca, new PosicaoXadrez(coluna, linha).ToPosicao());
+
+            _pecas.Add(peca);   //dizendo que essa pecas faz parte do meu conjunto da partida
+
+        }
+
         private void ColocarPecas()
         {
             //Usando a Class PosicaoXadrez() e o method ToPosicao
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('c', 1).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('c', 2).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('d', 2).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('e', 2).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Branca), new PosicaoXadrez('e', 1).ToPosicao());
-            _tabuleiro.ColocarPeca(new Rei(_tabuleiro, Cor.Branca), new PosicaoXadrez('d', 1).ToPosicao());
 
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Preta), new PosicaoXadrez('c', 7).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Preta), new PosicaoXadrez('c', 8).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Preta), new PosicaoXadrez('d', 7).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Preta), new PosicaoXadrez('e', 7).ToPosicao());
-            _tabuleiro.ColocarPeca(new Torre(_tabuleiro, Cor.Preta), new PosicaoXadrez('e', 8).ToPosicao());
-            _tabuleiro.ColocarPeca(new Rei(_tabuleiro, Cor.Preta), new PosicaoXadrez('d', 8).ToPosicao());
+            ColocarNovaPeca('c', 1, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('c', 2, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('d', 2, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('e', 2, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('e', 1, new Torre(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Rei(_tabuleiro, Cor.Branca));
+
+            ColocarNovaPeca('c', 7, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('c', 8, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('d', 7, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('e', 7, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('e', 8, new Torre(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('d', 8, new Rei(_tabuleiro, Cor.Preta));
+
         }
     }
 }

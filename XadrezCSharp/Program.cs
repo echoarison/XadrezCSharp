@@ -29,12 +29,7 @@ namespace XadrezCSharp
                         Console.Clear();
 
                         //usando o method static Do objeto Tela
-                        Tela.ImprimirTabuleiro(partida._tabuleiro);
-                        Console.WriteLine();
-
-                        //escrevendo o turno
-                        Console.WriteLine("Turno: " + partida._turno);
-                        Console.WriteLine("Aguardando jogada do jogador: " + partida._jogadorAtual);
+                        Tela.ImprimirPartida(partida);
 
                         Console.WriteLine();
 
