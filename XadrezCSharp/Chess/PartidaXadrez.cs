@@ -13,6 +13,7 @@ namespace Chess
         private HashSet<Peca> _pecas;   //conjunto é uma coleção de dados que obedece uma ordem
         private HashSet<Peca> _capturadas;  //conjunto é uma coleção de dados que obedece uma ordem
         public bool _xeque { get; private set; }
+        private Peca _vulneravelEnPassant;
 
         //construtor
         public PartidaXadrez()
@@ -22,6 +23,7 @@ namespace Chess
             _jogadorAtual = Cor.Branca;
             _terminada = false;
             _xeque = false;
+            _vulneravelEnPassant = null;
             //tem que ser antes de colocar as pecas
             _pecas = new HashSet<Peca>();
             _capturadas = new HashSet<Peca>();
@@ -173,6 +175,19 @@ namespace Chess
 
                 //muda jogador
                 MudaJogador();
+            }
+
+            //Pegando qual peça foi movimentada
+            Peca p = _tabuleiro.PecaMth(destino);
+
+            //#jogadaEspecial En Passant
+            if (p is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2)) 
+            {
+                _vulneravelEnPassant = p;
+            }
+            else
+            {
+                _vulneravelEnPassant = null;
             }
 
         }
