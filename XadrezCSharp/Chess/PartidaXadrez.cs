@@ -13,7 +13,7 @@ namespace Chess
         private HashSet<Peca> _pecas;   //conjunto é uma coleção de dados que obedece uma ordem
         private HashSet<Peca> _capturadas;  //conjunto é uma coleção de dados que obedece uma ordem
         public bool _xeque { get; private set; }
-        private Peca _vulneravelEnPassant;
+        public Peca _vulneravelEnPassant { get; private set; }
 
         //construtor
         public PartidaXadrez()
@@ -81,6 +81,32 @@ namespace Chess
                 _tabuleiro.ColocarPeca(T, destinoT);
             }
 
+            //#jogadaEspecial En Passant
+            if (p is Peao ) 
+            {
+                if (origin.Coluna != destino.Coluna && pecaCapturar == null) 
+                {
+                    Posicao posP;
+
+                    if (p.Cor == Cor.Branca) 
+                    {
+                        //uma peça a ser capturada uma linha abaixo
+                        posP = new Posicao(destino.Linha + 1, destino.Coluna);
+                    }
+                    else
+                    {
+                        //uma peça a ser capturada uma linha abaixo
+                        posP = new Posicao(destino.Linha - 1, destino.Coluna);
+                    }
+
+                    pecaCapturar = _tabuleiro.RetirarPeca(posP);
+
+                    //pecaCapturada
+                    _capturadas.Add(pecaCapturar);
+
+                }
+            }
+
             return pecaCapturar;
         }
 
@@ -129,6 +155,31 @@ namespace Chess
                 //fazendo o desfazendo o movimento
                 T.DescrementarQtdMovimentos();
                 _tabuleiro.ColocarPeca(T, origemT);
+            }
+
+            //#jogadaEspecial en Passant
+            if (p is Peao) 
+            {
+                if (origem.Coluna != destino.Coluna && pecaCapturada 
+                    == _vulneravelEnPassant) 
+                {
+                    //retirando a peca
+                    Peca peao = _tabuleiro.RetirarPeca(destino);
+
+                    Posicao posP;
+
+                    if (p.Cor == Cor.Branca)
+                    {
+                        posP = new Posicao(3, destino.Coluna);
+                    }
+                    else
+                    {
+                        posP = new Posicao(4,destino.Coluna);
+                    }
+
+                    _tabuleiro.ColocarPeca(peao, posP);
+
+                }
             }
 
         }
@@ -419,14 +470,14 @@ namespace Chess
             ColocarNovaPeca('f', 1, new Bispo(_tabuleiro, Cor.Branca));
             ColocarNovaPeca('g', 1, new Cavalo(_tabuleiro, Cor.Branca));
             ColocarNovaPeca('h', 1, new Torre(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('a', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('b', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('c', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('d', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('e', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('f', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('g', 2, new Peao(_tabuleiro, Cor.Branca));
-            ColocarNovaPeca('h', 2, new Peao(_tabuleiro, Cor.Branca));
+            ColocarNovaPeca('a', 2, new Peao(_tabuleiro, Cor.Branca, this));    //acessando o proprio objeto
+            ColocarNovaPeca('b', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('c', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('d', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('e', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('f', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('g', 2, new Peao(_tabuleiro, Cor.Branca, this));
+            ColocarNovaPeca('h', 2, new Peao(_tabuleiro, Cor.Branca, this));
 
             ColocarNovaPeca('a', 8, new Torre(_tabuleiro, Cor.Preta));
             ColocarNovaPeca('b', 8, new Cavalo(_tabuleiro, Cor.Preta));
@@ -436,14 +487,14 @@ namespace Chess
             ColocarNovaPeca('f', 8, new Bispo(_tabuleiro, Cor.Preta));
             ColocarNovaPeca('g', 8, new Cavalo(_tabuleiro, Cor.Preta));
             ColocarNovaPeca('h', 8, new Torre(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('a', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('b', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('c', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('d', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('e', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('f', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('g', 7, new Peao(_tabuleiro, Cor.Preta));
-            ColocarNovaPeca('h', 7, new Peao(_tabuleiro, Cor.Preta));
+            ColocarNovaPeca('a', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('b', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('c', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('d', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('e', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('f', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('g', 7, new Peao(_tabuleiro, Cor.Preta, this));
+            ColocarNovaPeca('h', 7, new Peao(_tabuleiro, Cor.Preta, this));
 
         }
     }

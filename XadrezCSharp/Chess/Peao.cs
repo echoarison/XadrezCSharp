@@ -4,10 +4,13 @@ namespace Chess
 {
     internal class Peao : Peca
     {
-        public Peao(Tabuleiro tab, Cor cor) 
+        //atributo
+        private PartidaXadrez Partida;
+
+        public Peao(Tabuleiro tab, Cor cor, PartidaXadrez partida) 
             : base(tab, cor)
         {
-
+            Partida = partida;
         }
 
         //override
@@ -68,6 +71,30 @@ namespace Chess
                 {
                     matz[position.Linha, position.Coluna] = true;
                 }
+
+                //#jogadaEspecial en Passant
+                if (Posicao.Linha == 3)
+                {
+                    //vendo se  o peao esta na esquerda e pode receber o en passant
+                    Posicao esquerda = new Posicao(Posicao.Linha, Posicao.Coluna - 1);
+
+                    //verificando se tudo é verdade
+                    if (Tabuleiro.PosicaoValida(esquerda) && ExisteInimigos(esquerda) 
+                        && Tabuleiro.PecaMth(esquerda) == Partida._vulneravelEnPassant) 
+                    {
+                        matz[esquerda.Linha - 1, esquerda.Coluna] = true;
+                    }
+
+                    //vendo se  o peao esta na esquerda e pode receber o en passant
+                    Posicao direita = new Posicao(Posicao.Linha, Posicao.Coluna + 1);
+
+                    //verificando se tudo é verdade
+                    if (Tabuleiro.PosicaoValida(direita) && ExisteInimigos(direita)
+                        && Tabuleiro.PecaMth(direita) == Partida._vulneravelEnPassant)
+                    {
+                        matz[direita.Linha - 1, direita.Coluna] = true;
+                    }
+                }
             }
             else 
             {
@@ -97,6 +124,30 @@ namespace Chess
                 if (Tabuleiro.PosicaoValida(position) && ExisteInimigos(position))
                 {
                     matz[position.Linha, position.Coluna] = true;
+                }
+
+                //#jogadaEspecial en Passant
+                if (Posicao.Linha == 4)
+                {
+                    //vendo se  o peao esta na esquerda e pode receber o en passant
+                    Posicao esquerda = new Posicao(Posicao.Linha, Posicao.Coluna - 1);
+
+                    //verificando se tudo é verdade
+                    if (Tabuleiro.PosicaoValida(esquerda) && ExisteInimigos(esquerda)
+                        && Tabuleiro.PecaMth(esquerda) == Partida._vulneravelEnPassant)
+                    {
+                        matz[esquerda.Linha + 1, esquerda.Coluna] = true;
+                    }
+
+                    //vendo se  o peao esta na esquerda e pode receber o en passant
+                    Posicao direita = new Posicao(Posicao.Linha, Posicao.Coluna + 1);
+
+                    //verificando se tudo é verdade
+                    if (Tabuleiro.PosicaoValida(direita) && ExisteInimigos(direita)
+                        && Tabuleiro.PecaMth(direita) == Partida._vulneravelEnPassant)
+                    {
+                        matz[direita.Linha + 1, direita.Coluna] = true;
+                    }
                 }
             }
 
