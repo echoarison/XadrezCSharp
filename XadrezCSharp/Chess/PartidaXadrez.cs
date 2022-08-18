@@ -200,6 +200,27 @@ namespace Chess
 
             }
 
+            //Pegando qual peça foi movimentada
+            Peca p = _tabuleiro.PecaMth(destino);
+
+            //#jogadaEspecial Promoção
+            if (p is Peao)
+            {
+                //jogada de promocao
+                if ((p.Cor == Cor.Branca && destino.Linha == 0) || 
+                    (p.Cor == Cor.Preta && destino.Linha == 7)) 
+                {
+                    p = _tabuleiro.RetirarPeca(destino);    //retirando a peca
+
+                    _pecas.Remove(p);   //removendo a peca
+
+                    //criando uma promocao
+                    Peca dama = new Dama(_tabuleiro, p.Cor);
+                    _tabuleiro.ColocarPeca(dama, destino);  //colocando no lugar do peao
+                    _pecas.Add(dama);   //add a lista de pecas
+                }
+            }
+
             //se deu xeque
             if (EstaEmXeque(Adversaria(_jogadorAtual)))
             {
@@ -227,9 +248,6 @@ namespace Chess
                 //muda jogador
                 MudaJogador();
             }
-
-            //Pegando qual peça foi movimentada
-            Peca p = _tabuleiro.PecaMth(destino);
 
             //#jogadaEspecial En Passant
             if (p is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2)) 
