@@ -11,12 +11,13 @@ namespace Chess
     {
 
         //atributo AutoProp
+        private PartidaXadrez Partida;  //para o rei saber o que esta acontecendo na partida e realizar o roque
 
         //construtor
-        public Rei(Tabuleiro tab, Cor cor)
+        public Rei(Tabuleiro tab, Cor cor, PartidaXadrez partida)
             : base(tab,cor)
         {
-            
+            Partida = partida;
         }
 
         //methods
@@ -28,6 +29,13 @@ namespace Chess
             //fazendo uma condição simples e abreviada
             return p == null || p.Cor != this.Cor;  //this é desnecessario, mas fica um pouco melhor
 
+        }
+
+        private bool TesteTorreParaRoque(Posicao position) 
+        {
+            Peca p = Tabuleiro.PecaMth(position);
+
+            return p != null && p is Torre && p.Cor == Cor && p.QtdMoviment == 0;
         }
 
         //methods abstract
@@ -95,6 +103,43 @@ namespace Chess
             if (Tabuleiro.PosicaoValida(position) && PodeMover(position))
             {
                 matz[position.Linha, position.Coluna] = true;
+            }
+
+            // #jogadaEspecia roque
+            if (QtdMoviment == 0 && !Partida._xeque)
+            {
+                //#jogadaEspecia roque pequeno
+                Posicao posT1 = new Posicao(Posicao.Linha, Posicao.Coluna + 3);
+
+                if (TesteTorreParaRoque(posT1))
+                {
+                    Posicao p1 = new Posicao(Posicao.Linha, Posicao.Coluna + 1);
+                    Posicao p2 = new Posicao(Posicao.Linha, Posicao.Coluna + 2);
+
+                    if (Tabuleiro.PecaMth(p1) == null && Tabuleiro.PecaMth(p2) == null)
+                    {
+                        matz[Posicao.Linha, Posicao.Coluna + 2] = true;
+                    }
+
+                }
+
+                //#jogadaEspecia roque grande
+                Posicao posT2 = new Posicao(Posicao.Linha, Posicao.Coluna - 4);
+
+                if (TesteTorreParaRoque(posT2))
+                {
+                    Posicao p1 = new Posicao(Posicao.Linha, Posicao.Coluna - 1);
+                    Posicao p2 = new Posicao(Posicao.Linha, Posicao.Coluna - 2);
+                    Posicao p3 = new Posicao(Posicao.Linha, Posicao.Coluna - 3);
+
+                    if (Tabuleiro.PecaMth(p1) == null && Tabuleiro.PecaMth(p2) == null 
+                        && Tabuleiro.PecaMth(p3) == null)
+                    {
+                        matz[Posicao.Linha, Posicao.Coluna - 2] = true;
+                    }
+
+                }
+
             }
 
             return matz;    //retornando a matriz
